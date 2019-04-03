@@ -41,9 +41,9 @@ class ParserPCG:
         None
         """
         self.__load_wav_file()
-        # self.__split_train_test() # Se quita porque no se utilizara en la clase
-        # TODO: check if directory exists and change output directory
-        self.save("/tmp")
+        
+        # Saving data as npy in the same place where raw data was loaded
+        self.save(basepath)
 
     def save(self, save_path):
         """
@@ -172,71 +172,6 @@ class ParserPCG:
             raise InvalidHeaderFileException("Invalid class label %s" % class_label)
 
         return class_label
-
-    # Las funciones __split_train_test y get_mini_batch fueron eliminadas 
-    # porque se utilizaran en otra parte del pipeline del proyecto
-    # def __split_train_test(self):
-    #     """
-    #     Splits internal features (self.X) and class labels (self.y) into
-    #     balanced training and test sets using sklearn's helper function.
-
-    #     Notes:
-    #      * if self.random_state is None, splits will be randomly seeded
-    #        otherwise, self.random_state defines the random seed to deterministicly
-    #        split training and test data
-    #      * For now, class balancing is done by subsampling the overrepresented class.
-    #       Ideally this would be pushed down to the cost function in TensorFlow.
-
-    #     Returns
-    #     -------
-    #     None
-    #     """
-    #     mlData = namedtuple('ml_data', 'X y')
-
-    #     num_pos, num_neg = np.sum(self.y, axis=0)
-
-    #     # Remove samples to rebalance classes
-    #     # TODO: push this down into the cost function
-    #     undersample_rate = num_neg / num_pos
-    #     over_represented_idxs = self.y[:, 1] == 0
-    #     under_represented_idxs = self.y[:, 1] == 1
-    #     random_indexes_to_remove = np.random.rand(self.y.shape[0]) < undersample_rate
-    #     sample_idxs = (over_represented_idxs & random_indexes_to_remove |
-    #                    under_represented_idxs)
-
-    #     X_balanced = self.X[sample_idxs, :]
-    #     y_balanced = self.y[sample_idxs, :]
-
-    #     X_train, X_test, y_train, y_test = train_test_split(X_balanced, y_balanced, test_size=0.25,
-    #                                                         random_state=self.random_state)
-
-    #     self.train = mlData(X=X_train, y=y_train)
-    #     self.test = mlData(X=X_test, y=y_test)
-
-    # def get_mini_batch(self, batch_size):
-    #     """
-    #     Helper function for sampling mini-batches from the training
-    #     set. Note, random_state needs to be set to None or the same
-    #     mini batch will be sampled eternally!
-
-    #     Parameters
-    #     ----------
-    #     batch_size: int
-    #         Number of elements to return in the mini batch
-
-    #     Returns
-    #     -------
-    #     X: np.ndarray
-    #         A feature matrix subsampled from self.train
-
-    #     y: np.ndarray
-    #         A one-hot matrix of class labels subsampled from self.train
-    #     """
-    #     random_state = check_random_state(None)  # self.random_state)
-    #     n_training_samples = self.train.X.shape[0]
-    #     minibatch_indices = random_state.randint(0, n_training_samples - 1, batch_size)
-
-    #     return self.train.X[minibatch_indices, :], self.train.y[minibatch_indices, :]
 
 
 class InvalidHeaderFileException(Exception):

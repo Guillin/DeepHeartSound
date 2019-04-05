@@ -112,7 +112,11 @@ class ParserPCG:
             rate, wf = wavfile.read(wavfname)
             wf = normalize(wf.reshape(1, -1))
 
-            X[idx, :] = wf
+            if len(wf) > self.embedding_size:
+                X[idx, :] = wf[:self.embedding_size]
+            else:
+                X[idx, :len(wf)] = wf
+
             idx += 1
 
         self.X = X

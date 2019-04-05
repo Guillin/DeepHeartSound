@@ -3,7 +3,6 @@ import pickle
 import numpy as np
 from scipy.io import wavfile
 from sklearn.preprocessing import normalize
-from sklearn.cross_validation import train_test_split
 from collections import namedtuple
 
 

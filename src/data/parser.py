@@ -98,7 +98,7 @@ class ParserPCG:
 
                         self.n_samples += 1
                     except InvalidHeaderFileException as e:
-                        print e
+                        print(e) 
 
 
         for idx, wavfname in enumerate(wav_file_names):

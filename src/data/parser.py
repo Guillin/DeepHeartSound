@@ -21,6 +21,11 @@ class ParserPCG:
 
         self.n_samples = 0
 
+        # Truncating the length of each wav file to the
+        # max file size (260000) (Note: this is bad
+        # because we are filling with zeros all the files which len is bellow of 260000)
+        self.embedding_size = 260000
+
         self.X = None
         self.y = None
 
@@ -99,6 +104,9 @@ class ParserPCG:
                     except InvalidHeaderFileException as e:
                         print(e) 
 
+        
+        # Inicialize X zeros array 
+        X = np.zeros([self.n_samples, self.embedding_size])
 
         for idx, wavfname in enumerate(wav_file_names):
             rate, wf = wavfile.read(wavfname)

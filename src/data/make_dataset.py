@@ -3,6 +3,7 @@ import click
 import logging
 from pathlib import Path
 from dotenv import find_dotenv, load_dotenv
+from parser import ParserPCG
 
 
 
@@ -14,7 +15,12 @@ def main(input_filepath, output_filepath):
         cleaned data ready to be analyzed (saved in ../processed).
     """
     logger = logging.getLogger(__name__)
-    logger.info('making final data set from raw data')
+    logger.info('INIT: making final data set from raw data')
+    pcg = ParserPCG(input_filepath, output_filepath)
+
+    pcg.initialize_wav_data()
+
+    logger.info('END: raw data processed.')
 
 
 if __name__ == '__main__':

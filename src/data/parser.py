@@ -2,8 +2,6 @@ import os
 import pickle
 import numpy as np
 from scipy.io import wavfile
-from scipy.fftpack import fft
-from scipy.signal import butter, lfilter
 from sklearn.preprocessing import normalize
 from sklearn.cross_validation import train_test_split
 from collections import namedtuple

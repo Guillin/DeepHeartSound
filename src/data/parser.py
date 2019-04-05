@@ -38,7 +38,7 @@ class ParserPCG:
         -------
         None
         """
-        self.__load_wav_file()
+        self.load()
         
         # Saving data as npy in the same place where raw data was loaded
         self.save(basepath)
@@ -63,29 +63,7 @@ class ParserPCG:
             pickle.dump((self.basepath, self.class_name_to_id, self.nclasses,
                          self.n_samples), fout)
 
-    # TODO Sacar esta funcion porque sirve para cargar datos ya preprocesados.
-    # def load(self, load_path): 
-    #     """
-    #     Load a previously stored ParserPCG class.
-
-    #     Parameters
-    #     ----------
-    #     load_path: str
-    #         Location on disk to load parsed PCG data
-
-    #     Returns
-    #     -------
-    #     None
-
-    #     """
-    #     self.X = np.load(os.path.join(load_path, "X.npy"))
-    #     self.y = np.load(os.path.join(load_path, "y.npy"))
-    #     with open(os.path.join(load_path, "meta"), "r") as fin:
-    #         (self.basepath, self.class_name_to_id, self.nclasses,
-    #          self.n_samples, self.random_state) = pickle.load(fin)
-    #     self.__split_train_test()
-
-    def __load_wav_file(self):
+    def load(self):
         """
         Loads physio 2016 challenge dataset from self.basepath by crawling the path.
         For each discovered wav file:

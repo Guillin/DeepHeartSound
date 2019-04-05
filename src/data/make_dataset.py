@@ -1,7 +1,6 @@
 # -*- coding: utf-8 -*-
 import click
 import logging
-import os
 from pathlib import Path
 from dotenv import find_dotenv, load_dotenv
 
@@ -29,4 +28,4 @@ if __name__ == '__main__':
     # load up the .env entries as environment variables
     load_dotenv(find_dotenv())
 
-    main(os.getenv("INPUT_FILEPATH"), os.getenv("OUTPUT_FILEPATH"))
+    main()

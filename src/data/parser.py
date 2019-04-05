@@ -14,8 +14,9 @@ class ParserPCG:
     features, class labels are extracted from header files and data is split into
     training and testing groups.
     """
-    def __init__(self, basepath):
+    def __init__(self, basepath, endpath):
         self.basepath = basepath
+        self.endpath = endpath
         self.class_name_to_id = {"normal": 0, "abnormal": 1}
         self.nclasses = len(self.class_name_to_id.keys())
 
@@ -40,8 +41,8 @@ class ParserPCG:
         """
         self.load()
         
-        # Saving data as npy in the same place where raw data was loaded
-        self.save(basepath)
+        # Saving data as npy in the end path
+        self.save(self.endpath)
 
     def save(self, save_path):
         """

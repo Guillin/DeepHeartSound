@@ -64,9 +64,6 @@ class ParserPCG:
         """
         np.save(os.path.join(save_path, "X.npy"), self.X)
         np.save(os.path.join(save_path, "y.npy"), self.y)
-        with open( os.path.join(save_path, "meta"), "w") as fout:
-            pickle.dump((self.basepath, self.class_name_to_id, self.nclasses,
-                         self.n_samples), fout)
 
     def load(self):
         """

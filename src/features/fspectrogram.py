@@ -9,7 +9,7 @@ def stft(sig, frameSize, overlapFac=0.5, window=np.hanning):
     hopSize = int(frameSize - np.floor(overlapFac * frameSize))
     
     # zeros at beginning (thus center of 1st window should be for sample nr. 0)
-    samples = np.append(np.zeros(np.floor(frameSize/2.0)), sig)    
+    samples = np.append(np.zeros(np.int(np.floor(frameSize/2.0))), sig)    
     # cols for windowing
     cols = np.ceil( (len(samples) - frameSize) / float(hopSize)) + 1
     # zeros at end (thus samples can be fully covered by frames)

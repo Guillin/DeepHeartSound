@@ -18,6 +18,8 @@ class ParserPCG:
         self.endpath = endpath
         self.class_name_to_id = {"normal": 0, "abnormal": 1}
         self.nclasses = len(self.class_name_to_id.keys())
+        self.class_labels = None
+        self.file_names = None
 
         self.n_samples = 0
 
@@ -64,6 +66,13 @@ class ParserPCG:
         """
         np.save(os.path.join(save_path, "X.npy"), self.X)
         np.save(os.path.join(save_path, "y.npy"), self.y)
+
+        pcgs = np.zeros(len(self.file_names), dtype=[('file', 'U6'), ('target', int)])
+        pcgs['file'] = self.file_names
+        pcgs['target'] = self.class_labels
+
+        # save file names and target in dataset PCGs 
+        np.savetxt(os.path.join(save_path, "PCGs.csv"), pcgs,  fmt="%10s %10i")
 
     def load(self):
         """
@@ -124,6 +133,10 @@ class ParserPCG:
 
         # Map from dense to one hot
         self.y = np.eye(self.nclasses)[class_labels]
+
+        # Save file names and class labels
+        self.file_names = wav_file_names
+        self.class_labels = class_labels
 
     def __parse_class_label(self, label_file_name):
         """

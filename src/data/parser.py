@@ -68,7 +68,7 @@ class ParserPCG:
         np.save(os.path.join(save_path, "X.npy"), self.X)
         np.save(os.path.join(save_path, "y.npy"), self.y)
 
-        pcgs = pd.Dataframe([self.file_names, self.class_labels], columns=['file', 'target'])
+        pcgs = pd.DataFrame([self.file_names, self.class_labels], columns=['file', 'target'])
         
         # save file names and target in dataset PCGs 
         pcgs.to_csv(os.path.join(save_path, "PCGs.csv"), sep=',')

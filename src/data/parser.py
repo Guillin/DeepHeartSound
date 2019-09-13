@@ -1,6 +1,7 @@
 import os
 import pickle
 import numpy as np
+import pandas as pd
 from scipy.io import wavfile
 from sklearn.preprocessing import normalize
 from collections import namedtuple
@@ -67,12 +68,10 @@ class ParserPCG:
         np.save(os.path.join(save_path, "X.npy"), self.X)
         np.save(os.path.join(save_path, "y.npy"), self.y)
 
-        pcgs = np.zeros(len(self.file_names), dtype=[('file', 'U6'), ('target', int)])
-        pcgs['file'] = self.file_names
-        pcgs['target'] = self.class_labels
-
+        pcgs = pd.Dataframe([self.file_names, self.class_labels], columns=['file', 'target'])
+        
         # save file names and target in dataset PCGs 
-        np.savetxt(os.path.join(save_path, "PCGs.csv"), pcgs,  fmt="%10s %10i")
+        pcgs.to_csv(os.path.join(save_path, "PCGs.csv"), sep=',')
 
     def load(self):
         """

@@ -14,7 +14,7 @@ class ParserPCG:
     features, class labels are extracted from header files and data is split into
     training and testing groups.
     """
-    def __init__(self, basepath, endpath):
+    def __init__(self, basepath, endpath, embedding_size=260000):
         self.basepath = basepath
         self.endpath = endpath
         self.class_name_to_id = {"normal": 0, "abnormal": 1}
@@ -25,9 +25,9 @@ class ParserPCG:
         self.n_samples = 0
 
         # Truncating the length of each wav file to the
-        # max file size (260000) (Note: this is bad
+        # default max file size (260000) (Note: this is bad
         # because we are filling with zeros all the files which len is bellow of 260000)
-        self.embedding_size = 260000
+        self.embedding_size = embedding_size
 
         self.X = None
         self.y = None

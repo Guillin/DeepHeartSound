@@ -137,7 +137,7 @@ class ParserPCG:
         self.file_names = wav_file_names
         self.class_labels = class_labels
 
-    def __parse_class_label(self, label_file_name):
+    def parse_class_label(self, label_file_name):
         """
         Parses physio bank header files, where the class label
         is located in the last line of the file. An example header

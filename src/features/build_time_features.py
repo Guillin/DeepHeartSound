@@ -3,11 +3,12 @@ import numpy as np
 import sys
 import scipy.io
 from src.data.parser import ParserPCG
+from src.data.parser import InvalidHeaderFileException
 
 class BuildTimeFeatures(ParserPCG):
 
     def __init__(self, basepath, endpath):
-        super.__init__(basepath, endpath)
+        super().__init__(basepath, endpath)
 
         # Number of features generate by get_time_features function.
         # this needs to be seted in order to create the final matrix (X) conteining all features extracted from all
@@ -163,7 +164,7 @@ class BuildTimeFeatures(ParserPCG):
                         base_file_name = file.rstrip(".mat")
                         label_file_name = os.path.join(root, base_file_name + ".hea")
 
-                        class_label = self.__parse_class_label(label_file_name)
+                        class_label = super().parse_class_label(label_file_name)
                         class_labels.append(self.class_name_to_id[class_label])
                         mat_file_names.append(os.path.join(root, file))
 

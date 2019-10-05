@@ -2,7 +2,7 @@
 import click
 import logging
 from pathlib import Path
-from src.features.build_time_features import BuildTimeFeatures
+from build_time_features import BuildTimeFeatures
 
 
 

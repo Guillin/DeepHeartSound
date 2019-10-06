@@ -4,6 +4,7 @@ import sys
 import scipy.io
 from src.data.parser import ParserPCG
 from src.data.parser import InvalidHeaderFileException
+from detect_peaks import detect_peaks
 
 class BuildTimeFeatures(ParserPCG):
 
@@ -14,6 +15,9 @@ class BuildTimeFeatures(ParserPCG):
         # this needs to be seted in order to create the final matrix (X) conteining all features extracted from all
         # wav files
         self.nfeatures = 20
+        self.denominator = 10
+        self.percentile = 5
+        self.freq_sampling = 1000
 
     def get_time_features(self, PCG, assigned_states):
         # We just assume that the assigned_states cover at least 2 whole heart beat cycle
@@ -132,9 +136,16 @@ class BuildTimeFeatures(ParserPCG):
             m_Amp_DiaS2 = 0
             sd_Amp_DiaS2 = 0
 
+        # get peaks from autocorrelation
+        signal_min = np.nanpercentile(PCG, self.percentile)
+        signal_max = np.nanpercentile(PCG, 100-percentile)
+        mph = signal_min + (signal_max - signal_min)/self.denominator
+
+        autocorr_peaks = self.get_peaks(self.get_autocorr_values(PCG),  mph)
+
         return [m_RR, sd_RR, mean_IntS1, sd_IntS1, mean_IntS2, sd_IntS2, mean_IntSys, sd_IntSys, mean_IntDia, sd_IntDia,
                 m_Ratio_SysRR, sd_Ratio_SysRR, m_Ratio_DiaRR, sd_Ratio_DiaRR, m_Ratio_SysDia, sd_Ratio_SysDia,
-                m_Amp_SysS1, sd_Amp_SysS1, m_Amp_DiaS2, sd_Amp_DiaS2]
+                m_Amp_SysS1, sd_Amp_SysS1, m_Amp_DiaS2, sd_Amp_DiaS2] + autocorrelation
 
     def load(self):
         """
@@ -214,6 +225,32 @@ class BuildTimeFeatures(ParserPCG):
         """
         np.save(os.path.join(save_path, "X_TF.npy"), self.X)
         np.save(os.path.join(save_path, "y.npy"), self.y)
+
+    def autocorr(self, x):
+        result = np.correlate(x, x, mode='full')
+        return result[len(result)//2:]
+
+    def get_autocorr_values(self, y_values):
+
+        T = 1/self.freq_sampling
+        N = len(y_values)
+
+        autocorr_values = autocorr(y_values)
+        x_values = np.array([T * jj for jj in range(0, N)])
+        return x_values, autocorr_values
+
+    def get_first_n_peaks(self, x, y, no_peaks=5):
+        x_, y_ = list(x), list(y)
+        if len(x_) > no_peaks:
+            return x_[:no_peaks], y_[:no_peaks]
+        else:
+            missing_no_peaks = no_peaks-len(x_)
+            return x_ + [0]*missing_no_peaks, y_ + [0]*missing_no_peaks
+    
+    def get_peaks(x_values, y_values, mph):
+        indices_peaks = detect_peaks(y_values, mph=mph)
+        peaks_x, peaks_y = get_first_n_peaks(x_values[indices_peaks], y_values[indices_peaks])
+        return peaks_x + peaks_y
 
 
 

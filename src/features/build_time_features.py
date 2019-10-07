@@ -14,7 +14,7 @@ class BuildTimeFeatures(ParserPCG):
         # Number of features generate by get_time_features function.
         # this needs to be seted in order to create the final matrix (X) conteining all features extracted from all
         # wav files
-        self.nfeatures = 20
+        self.nfeatures = 30
         self.denominator = 10
         self.percentile = 5
         self.freq_sampling = 1000
@@ -138,7 +138,7 @@ class BuildTimeFeatures(ParserPCG):
 
         # get peaks from autocorrelation
         signal_min = np.nanpercentile(PCG, self.percentile)
-        signal_max = np.nanpercentile(PCG, 100-percentile)
+        signal_max = np.nanpercentile(PCG, 100-self.percentile)
         mph = signal_min + (signal_max - signal_min)/self.denominator
 
         autocorr_peaks = self.get_peaks(self.get_autocorr_values(PCG),  mph)
@@ -235,7 +235,7 @@ class BuildTimeFeatures(ParserPCG):
         T = 1/self.freq_sampling
         N = len(y_values)
 
-        autocorr_values = autocorr(y_values)
+        autocorr_values = self.autocorr(y_values)
         x_values = np.array([T * jj for jj in range(0, N)])
         return x_values, autocorr_values
 
@@ -249,7 +249,7 @@ class BuildTimeFeatures(ParserPCG):
     
     def get_peaks(x_values, y_values, mph):
         indices_peaks = detect_peaks(y_values, mph=mph)
-        peaks_x, peaks_y = get_first_n_peaks(x_values[indices_peaks], y_values[indices_peaks])
+        peaks_x, peaks_y = self.get_first_n_peaks(x_values[indices_peaks], y_values[indices_peaks])
         return peaks_x + peaks_y
 
 
